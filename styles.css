@@ -7,14 +7,52 @@ body {
   background: #e6f0ff;
 }
 
-.nav {
+main {
+  width: 1110px;
+  margin: auto;
+}
+
+/* .nav {
+  display: flex;
+  align-items: center;
+  padding-top: 35px;
+}
+
+.nav .item-nav {
+  display: flex;
+  margin-left: 130px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.nav .item-nav a {
+  color: #4f5361;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding-left: 40px;
+}
+
+.nav .item-nav a:hover {
+  color: #0f1b4c;
+} */
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: #b9a9fb;
+}
+.content {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10rem 10rem 5rem;
 }
 
-.nav .text {
+.content .text {
   font-size: 2.5rem;
   font-weight: 700;
   color: #0f1b4c;
@@ -86,11 +124,15 @@ table {
 th,
 td {
   padding: 12px 15px;
-  text-align: center;
+  text-align: left;
 }
 
 th {
   background-color: #b9a9fb;
   text-align: center;
   font-weight: 700;
+}
+
+#clearLocalStorageLink {
+  padding-left: 20px;
 }

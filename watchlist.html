@@ -26,20 +26,23 @@
         <div class="text">
           <h1>
             <span class="holdstation">HOLDSTATION </span>/
-            <a href="#!">CHECKWALLET</a> /
+            <a href="index.html">CHECKWALLET</a> /
             <a href="./watchlist.html"> WATCHLIST</a>
           </h1>
         </div>
       </div>
       <div class="search-bar">
         <form autocomplete="off">
-          <img src="./search-icon.svg" alt="Search Icon" />
-          <input id="UserInput" type="text" placeholder="Search an Address" />
-          <button onclick="returnText()">SEARCH</button>
+          <img src="./insert-icon.svg" alt="Search Icon" />
+          <input id="UserInput" type="text" placeholder="Insert an Address" />
+          <button onclick="returnText_wlist()">INSERT</button>
         </form>
+        <a title="Clear Local Storage" href="#" id="clearLocalStorageLink"
+          ><img src="./reload-icon.svg" alt=""
+        /></a>
       </div>
-      <table id="resultTable"></table>
+      <table id="watchlist"></table>
     </main>
-    <script src="./index.js"></script>
+    <script src="./watchlist.js"></script>
   </body>
 </html>

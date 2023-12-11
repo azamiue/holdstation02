@@ -32,6 +32,8 @@ async function returnText() {
   // Thêm header vào bảng
   resultTable.appendChild(headerRow);
 
+  snum = 0;
+
   for (let key of inputArray) {
     var api_key = api + key;
     console.log(key);
@@ -40,6 +42,14 @@ async function returnText() {
       const res = await fetch(api_key);
       if (res.status == 200) {
         const data = await res.json();
+
+        // lưu vào localstorage
+        let savedItem_cache = JSON.stringify(data[0]);
+        console.log(savedItem_cache);
+        snum = localStorage.length;
+        // Lưu lịch sử input // LocalStorage
+        localStorage.setItem(`${snum++}`, savedItem_cache);
+        savedItemindex = snum;
 
         // Tạo dòng mới cho mỗi dữ liệu JSON
         var dataRow = document.createElement("tr");
