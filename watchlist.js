@@ -16,25 +16,67 @@ headerRow.appendChild(IndexHeader);
 var addressHeader = document.createElement("th");
 addressHeader.textContent = "Address";
 headerRow.appendChild(addressHeader);
+
+var buttonHeader = document.createElement("th");
+buttonHeader.textContent = "";
+headerRow.appendChild(buttonHeader);
+
+var searchHeader = document.createElement("th");
+searchHeader.textContent = "";
+headerRow.appendChild(searchHeader);
+
+// var buttonHeader = document.createElement("button");
+// buttonHeader.textContent = "Click me";
+// headerRow.appendChild(buttonHeader);
+
 watchlist.appendChild(headerRow);
-
-// Thêm header vào bảng
-
-saveItem = [];
-for (var i = 0; i < localStorage.length; i++) {
-  let savedItemCache = JSON.parse(localStorage.getItem(i));
-
-  saveItem.push(savedItemCache.address);
-}
 
 function onlyUnique(value, index, array) {
   return array.indexOf(value) === index;
 }
 
-var AdressUnique = saveItem.filter(onlyUnique);
-console.log(AdressUnique);
+function addAddressToLocalStorage(address) {
+  // Lấy danh sách các địa chỉ từ localStorage
+  let storedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
 
-for (var i = 0; i < AdressUnique.length; i++) {
+  // Kiểm tra xem địa chỉ đã tồn tại trong danh sách chưa
+  if (!storedAddresses.includes(address)) {
+    // Thêm địa chỉ vào danh sách
+    storedAddresses.push(address);
+
+    // Cập nhật localStorage với danh sách mới
+    localStorage.setItem("addresses", JSON.stringify(storedAddresses));
+
+    console.log(`Add ${address} to localStorage.`);
+  } else {
+    console.log(`${address} already exist in localStorage.`);
+  }
+}
+
+// Hàm để xóa một địa chỉ khỏi danh sách và cập nhật localStorage
+function removeAddressFromLocalStorage(address) {
+  // Lấy danh sách các địa chỉ từ localStorage
+  let storedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
+
+  // Xác định vị trí của địa chỉ trong danh sách
+  const addressIndex = storedAddresses.indexOf(address);
+
+  // Kiểm tra xem địa chỉ có tồn tại trong danh sách không
+  if (addressIndex !== -1) {
+    // Xóa địa chỉ khỏi danh sách
+    storedAddresses.splice(addressIndex, 1);
+
+    // Cập nhật localStorage với danh sách mới
+    localStorage.setItem("addresses", JSON.stringify(storedAddresses));
+  } else {
+  }
+}
+
+// Lấy dữ liệu trong local storage
+const storedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
+console.log(storedAddresses.length);
+
+for (var i = 0; i < storedAddresses.length; i++) {
   var dataRow = document.createElement("tr");
 
   var indexCell = document.createElement("td");
@@ -42,8 +84,53 @@ for (var i = 0; i < AdressUnique.length; i++) {
   dataRow.appendChild(indexCell);
 
   var addressCell = document.createElement("td");
-  addressCell.textContent = AdressUnique[i];
+  addressCell.textContent = storedAddresses[i];
   dataRow.appendChild(addressCell);
+
+  // Create a table cell for the button
+  var buttonCell = document.createElement("td");
+
+  // Create a button element
+  var buttonRow = document.createElement("button");
+  // Create an img element for the button content
+  var iconImg = document.createElement("img");
+  iconImg.src = "trash-can.svg"; // Replace with the path to your trash icon image
+  iconImg.alt = "TrashIcon";
+
+  // Add a class to the button
+
+  buttonRow.classList.add(storedAddresses[i]); // Replace "yourClassName" with the desired class name
+  buttonRow.onclick = deletearr;
+  buttonRow.appendChild(iconImg);
+  // Append the button to the buttonCell
+  buttonCell.appendChild(buttonRow);
+
+  // Append the buttonCell to the dataRow
+  dataRow.appendChild(buttonCell);
+
+  // Create a table cell for the button search
+  var searchCell = document.createElement("td");
+
+  // Create a table cell for the button
+  var buttonCell = document.createElement("td");
+
+  // Create a button element
+  var buttonRow = document.createElement("button");
+  // Create an img element for the button content
+  var iconImg = document.createElement("img");
+  iconImg.src = "search-icon.svg"; // Replace with the path to your trash icon image
+  iconImg.alt = "SearchIcon";
+
+  // Add a class to the button
+
+  buttonRow.classList.add(storedAddresses[i]); // Replace "yourClassName" with the desired class name
+  buttonRow.onclick = searcharr;
+  buttonRow.appendChild(iconImg);
+  // Append the button to the buttonCell
+  buttonCell.appendChild(buttonRow);
+
+  // Append the buttonCell to the dataRow
+  dataRow.appendChild(buttonCell);
 
   watchlist.appendChild(dataRow);
 }
@@ -51,39 +138,57 @@ for (var i = 0; i < AdressUnique.length; i++) {
 async function returnText_wlist() {
   var input = document.getElementById("UserInput").value;
   var inputArray = input.split(",");
-  console.log(inputArray);
 
   for (let key of inputArray) {
     var api_key = api + key;
-    console.log(key);
     try {
       const res = await fetch(api_key);
       if (res.status == 200) {
         const data = await res.json();
-        if (AdressUnique.includes(key)) {
+        if (storedAddresses.includes(key)) {
           alert(`${key} already exist`);
         } else {
           // lưu vào localstorage
-          let savedItem_cache = JSON.stringify(data[0]);
-          console.log(savedItem_cache);
-          snum = localStorage.length;
-          // Lưu lịch sử input // LocalStorage
-          localStorage.setItem(`${snum++}`, savedItem_cache);
-          savedItemindex = AdressUnique.length;
+          addAddressToLocalStorage(data[0].address);
+          // savedItemindex = storedAddresses.length;
 
-          var dataRow = document.createElement("tr");
+          // var dataRow = document.createElement("tr");
 
-          var indexCell = document.createElement("td");
-          indexCell.textContent = savedItemindex;
-          dataRow.appendChild(indexCell);
+          // var indexCell = document.createElement("td");
+          // indexCell.textContent = savedItemindex;
+          // dataRow.appendChild(indexCell);
 
-          savedItemindex++;
+          // savedItemindex++;
 
-          var addressCell = document.createElement("td");
-          addressCell.textContent = key;
-          dataRow.appendChild(addressCell);
+          // var addressCell = document.createElement("td");
+          // addressCell.textContent = key;
+          // dataRow.appendChild(addressCell);
 
-          watchlist.appendChild(dataRow);
+          // // Create a table cell for the button
+          // var buttonCell = document.createElement("td");
+
+          // // Create a button element
+          // var buttonRow = document.createElement("button");
+          // // Create an img element for the button content
+          // var iconImg = document.createElement("img");
+          // iconImg.src = "trash-can.svg"; // Replace with the path to your trash icon image
+          // iconImg.alt = "TrashIcon";
+
+          // // Add a class to the button
+          // buttonRow.classList.add(i); // Replace "yourClassName" with the desired class name
+          // buttonRow.onclick = deletearr;
+          // buttonRow.appendChild(iconImg);
+          // // Append the button to the buttonCell
+          // buttonCell.appendChild(buttonRow);
+
+          // // Append the buttonCell to the dataRow
+          // dataRow.appendChild(buttonCell);
+
+          // // Append the button to the buttonCell
+          // buttonCell.appendChild(buttonRow);
+
+          // // Append the buttonCell to the dataRow
+          // dataRow.appendChild(buttonCell);
         }
       } else {
         alert(`Could not find address: ${key}`);
@@ -92,61 +197,113 @@ async function returnText_wlist() {
       console.error(error.message);
     }
   }
-  location.reload();
+  location.reload(true);
   console.log("All requests completed");
 }
 
-let clearLocalStorageLink = document.getElementById("clearLocalStorageLink");
+async function refresh() {
+  watchlist.innerHTML = "";
+  // Tạo header cho bảng
+  var headerRow = document.createElement("tr");
 
-// Gán sự kiện click cho thẻ a
-clearLocalStorageLink.addEventListener("click", function () {
-  localStorage.clear();
-  alert("Local Storage cleared");
-  location.reload();
-});
+  var IndexHeader = document.createElement("th");
+  IndexHeader.textContent = "Index";
+  headerRow.appendChild(IndexHeader);
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  var addressHeader = document.createElement("th");
+  addressHeader.textContent = "Address";
+  headerRow.appendChild(addressHeader);
 
-// // Tạo header cho bảng
-// var headerRow = document.createElement("tr");
+  var pendingRewardHeader = document.createElement("th");
+  pendingRewardHeader.textContent = "Pending Reward";
+  headerRow.appendChild(pendingRewardHeader);
 
-// var IndexHeader = document.createElement("th");
-// IndexHeader.textContent = "Index";
-// headerRow.appendChild(IndexHeader);
+  var harvestedRewardHeader = document.createElement("th");
+  harvestedRewardHeader.textContent = "Harvested Reward";
+  headerRow.appendChild(harvestedRewardHeader);
 
-// var addressHeader = document.createElement("th");
-// addressHeader.textContent = "Address";
-// headerRow.appendChild(addressHeader);
+  var buttonHeader = document.createElement("th");
+  buttonHeader.textContent = "";
+  headerRow.appendChild(buttonHeader);
 
-// // Thêm header vào bảng
-// watchlist.appendChild(headerRow);
+  watchlist.appendChild(headerRow);
 
-// saveItem = [];
-// for (var i = 0; i < localStorage.length; i++) {
-//   let savedItemCache = JSON.parse(localStorage.getItem(i));
+  for (i = 0; i < storedAddresses.length; i++) {
+    var api_key = api + storedAddresses[i];
 
-//   saveItem.push(savedItemCache.address);
-// }
+    try {
+      const res = await fetch(api_key);
+      if (res.status == 200) {
+        const data = await res.json();
 
-// function onlyUnique(value, index, array) {
-//   return array.indexOf(value) === index;
-// }
+        // Tạo dòng mới cho mỗi dữ liệu JSON
+        var dataRow = document.createElement("tr");
 
-// var AdressUnique = saveItem.filter(onlyUnique);
-// console.log(AdressUnique);
+        var IndexCell = document.createElement("td");
+        IndexCell.textContent = i;
+        dataRow.appendChild(IndexCell);
 
-// for (var i = 0; i < AdressUnique.length; i++) {
-//   var dataRow = document.createElement("tr");
+        var addressCell = document.createElement("td");
+        addressCell.textContent = data[0].address;
+        dataRow.appendChild(addressCell);
 
-//   var indexCell = document.createElement("td");
-//   indexCell.textContent = i;
-//   dataRow.appendChild(indexCell);
+        var pendingRewardCell = document.createElement("td");
+        pendingRewardCell.textContent = data[0].pendingReward;
+        dataRow.appendChild(pendingRewardCell);
 
-//   var addressCell = document.createElement("td");
-//   addressCell.textContent = AdressUnique[i];
-//   dataRow.appendChild(addressCell);
+        var harvestedRewardCell = document.createElement("td");
+        harvestedRewardCell.textContent = data[0].harvestedReward;
+        dataRow.appendChild(harvestedRewardCell);
 
-//   watchlist.appendChild(dataRow);
-// }
+        // Create a table cell for the button
+        var buttonCell = document.createElement("td");
 
-// =========================================================================
+        // Create a button element
+        var buttonRow = document.createElement("button");
+        // Create an img element for the button content
+        var iconImg = document.createElement("img");
+        iconImg.src = "trash-can.svg"; // Replace with the path to your trash icon image
+        iconImg.alt = "TrashIcon";
+
+        // Add a class to the button
+        buttonRow.classList.add(data[0].address); // Replace "yourClassName" with the desired class name
+        buttonRow.onclick = deletearr; // Replace "deletearr" with the name of your JavaScript function
+        buttonRow.appendChild(iconImg);
+        // Append the button to the buttonCell
+        buttonCell.appendChild(buttonRow);
+
+        // Append the buttonCell to the dataRow
+        dataRow.appendChild(buttonCell);
+
+        // Thêm dòng vào bảng
+        watchlist.appendChild(dataRow);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+}
+
+// Define your JavaScript function
+function deletearr() {
+  var buttonClass = this.classList[0];
+  removeAddressFromLocalStorage(buttonClass);
+  location.reload(true);
+}
+
+// watchlist.js
+function searcharr() {
+  var buttonClass = this.classList[0];
+  localStorage.setItem("global", buttonClass);
+
+  // Check if the parent window has the parentReload function
+  if (
+    window.parent &&
+    window.parent.parentReload &&
+    typeof window.parent.parentReload === "function"
+  ) {
+    // Call the parentReload function if it's defined
+    window.parent.parentReload(true);
+  } else {
+  }
+}

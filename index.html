@@ -16,30 +16,29 @@
 
   <body>
     <main>
-      <!-- <div class="nav">
-        <ul class="item-nav">
-          <li><a href="./index.html">CheckWallet</a></li>
-          <li><a href="./watchlist.html">Watchlist</a></li>
-        </ul>
-      </div> -->
+      <div class="header">
+        <h1>HOLDSTATION</h1>
+      </div>
+
       <div class="content">
-        <div class="text">
-          <h1>
-            <a href="https://holdstation.com/" class="holdstation"
-              >HOLDSTATION </a
-            >/ <a href="#!">CHECKWALLET</a> /
-            <a href="./watchlist.html"> WATCHLIST</a>
-          </h1>
+        <div class="search-bar">
+          <div class="checkwallet">Check Wallet</div>
+          <form autocomplete="off">
+            <img src="./search-icon.svg" alt="Search Icon" />
+            <input id="UserInput" type="text" placeholder="Search an Address" />
+            <button onclick="returnText()">Search</button>
+          </form>
+          <table id="resultTable"></table>
+        </div>
+        <div class="watchlist">
+          <iframe
+            scrolling="yes"
+            id="watchlist-iframe"
+            src="./watchlist.html"
+            frameborder="0"
+          ></iframe>
         </div>
       </div>
-      <div class="search-bar">
-        <form autocomplete="off">
-          <img src="./search-icon.svg" alt="Search Icon" />
-          <input id="UserInput" type="text" placeholder="Search an Address" />
-          <button onclick="returnText()">SEARCH</button>
-        </form>
-      </div>
-      <table id="resultTable"></table>
     </main>
     <script src="./index.js"></script>
   </body>
